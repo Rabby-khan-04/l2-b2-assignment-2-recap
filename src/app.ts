@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
-import { ALLOWED_ORIGIN } from "./constant";
+import { ALLOWED_ORIGIN } from "./constant.js";
 const app = express();
 
 // App middleware
