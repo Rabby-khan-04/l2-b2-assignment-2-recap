@@ -14,6 +14,7 @@ const required = (value: string | undefined, name: string): string => {
 const config = {
   port: required(process.env.PORT, "PORT"),
   mongodb_uri: required(process.env.MONGODB_URI, "MONGODB_URI"),
+  google_api_key: required(process.env.GOOGLE_API_KEY, "GOOGLE_API_KEY"),
 };
 
 export default config;

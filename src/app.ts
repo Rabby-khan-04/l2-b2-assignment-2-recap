@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import { ALLOWED_ORIGIN } from "./constant.js";
+import globalErrorHandler from "./app/middleware/globalErrorHandler.js";
 const app = express();
 
 // App middleware
@@ -26,5 +27,7 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
+
+app.use(globalErrorHandler);
 
 export default app;
