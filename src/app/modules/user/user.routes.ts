@@ -11,5 +11,8 @@ router
     validateRequest(userCreationValidationSchema),
     UserController.createUser,
   );
+router.route("/users").get(UserController.getAllUsers);
+
+router.route("/users/:userId").get(UserController.getAUserInfofe);
 
 export default router;
