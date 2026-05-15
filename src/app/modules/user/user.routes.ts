@@ -29,6 +29,7 @@ router
 
 router
   .route("/users/:userId/orders")
-  .put(validateRequest(orderValidationSchema), UserController.createOrder);
+  .put(validateRequest(orderValidationSchema), UserController.createOrder)
+  .get(UserController.getAllOrdersOfUser);
 
 export default router;

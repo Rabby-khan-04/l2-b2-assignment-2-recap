@@ -58,16 +58,22 @@ const deleteAUserFromDB = async (userId: number) => {
 };
 
 const createOrderIntoDB = async (userId: number, payload: TOrder) => {
-  console.log(payload);
   const user = await User.findOneAndUpdate(
     { userId },
     { $push: { orders: payload } },
   );
 
-  console.log(user);
   if (!user) throw new AppError(status.BAD_REQUEST, "Invalid user id");
 
   return null;
+};
+
+const getAllOrdersOfUserFromDB = async (userId: number) => {
+  const orders = await User.findOne({ userId }).select({ orders: 1 });
+
+  if (!orders) throw new AppError(status.BAD_REQUEST, "Invalid user id");
+
+  return orders;
 };
 
 export const UserService = {
@@ -77,4 +83,5 @@ export const UserService = {
   updateUserInfoIntoDB,
   deleteAUserFromDB,
   createOrderIntoDB,
+  getAllOrdersOfUserFromDB,
 };

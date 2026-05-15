@@ -71,6 +71,18 @@ const createOrder = async (req: Request, res: Response) => {
     .json(new ApiResponse(true, "Order Created successfully", null));
 };
 
+const getAllOrdersOfUser = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  if (!userId || Array.isArray(userId))
+    throw new AppError(status.BAD_REQUEST, "Invalid user id");
+
+  const orders = await UserService.getAllOrdersOfUserFromDB(parseFloat(userId));
+
+  return res
+    .status(status.OK)
+    .json(new ApiResponse(true, "Order fetched successfully!", orders));
+};
+
 export const UserController = {
   createUser,
   getAllUsers,
@@ -78,4 +90,5 @@ export const UserController = {
   updatUserInfo,
   deleteAUser,
   createOrder,
+  getAllOrdersOfUser,
 };
