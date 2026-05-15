@@ -31,4 +31,51 @@ const getAUserInfo = async (req: Request, res: Response) => {
     .json(new ApiResponse(true, "User fetched successfully!", user));
 };
 
-export const UserController = { createUser, getAllUsers, getAUserInfo };
+const updatUserInfo = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+
+  if (!userId || Array.isArray(userId))
+    throw new AppError(status.BAD_REQUEST, "Invalid user id");
+
+  const user = await UserService.updateUserInfoIntoDB(
+    parseFloat(userId),
+    req.body,
+  );
+
+  return res
+    .status(status.OK)
+    .json(new ApiResponse(true, "User updated successfully", user));
+};
+
+const deleteAUser = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+
+  if (!userId || Array.isArray(userId))
+    throw new AppError(status.BAD_REQUEST, "Invalid user id");
+  await UserService.deleteAUserFromDB(parseFloat(userId));
+  return res
+    .status(status.OK)
+    .json(new ApiResponse(true, "User deleted successfully", null));
+};
+
+const createOrder = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+
+  if (!userId || Array.isArray(userId))
+    throw new AppError(status.BAD_REQUEST, "Invalid user id");
+
+  await UserService.createOrderIntoDB(parseFloat(userId), req.body);
+
+  res
+    .status(status.OK)
+    .json(new ApiResponse(true, "Order Created successfully", null));
+};
+
+export const UserController = {
+  createUser,
+  getAllUsers,
+  getAUserInfo,
+  updatUserInfo,
+  deleteAUser,
+  createOrder,
+};

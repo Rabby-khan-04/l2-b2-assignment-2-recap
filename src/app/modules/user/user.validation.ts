@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const fullNameValidationSchema = z.object({
   firstName: z.string({
-    error: iss => {
+    error: (iss) => {
       if (iss.input === undefined) return { message: "First name is required" };
       if (iss.code === "invalid_type")
         return { message: "First name must be a string" };
@@ -11,7 +11,7 @@ const fullNameValidationSchema = z.object({
   }),
 
   lastName: z.string({
-    error: iss => {
+    error: (iss) => {
       if (iss.input === undefined) return { message: "Last name is required" };
       if (iss.code === "invalid_type")
         return { message: "Last name must be a string" };
@@ -22,7 +22,7 @@ const fullNameValidationSchema = z.object({
 
 const addressValidationSchema = z.object({
   street: z.string({
-    error: iss => {
+    error: (iss) => {
       if (iss.input === undefined) return { message: "Street is required" };
       if (iss.code === "invalid_type")
         return { message: "Street must be a string" };
@@ -31,7 +31,7 @@ const addressValidationSchema = z.object({
   }),
 
   city: z.string({
-    error: iss => {
+    error: (iss) => {
       if (iss.input === undefined) return { message: "City is required" };
       if (iss.code === "invalid_type")
         return { message: "City must be a string" };
@@ -40,7 +40,7 @@ const addressValidationSchema = z.object({
   }),
 
   country: z.string({
-    error: iss => {
+    error: (iss) => {
       if (iss.input === undefined) return { message: "Country is required" };
       if (iss.code === "invalid_type")
         return { message: "Country must be a string" };
@@ -49,9 +49,9 @@ const addressValidationSchema = z.object({
   }),
 });
 
-const orderValidationSchema = z.object({
+export const orderValidationSchema = z.object({
   productName: z.string({
-    error: iss => {
+    error: (iss) => {
       if (iss.input === undefined)
         return { message: "Product name is required" };
       if (iss.code === "invalid_type")
@@ -61,7 +61,7 @@ const orderValidationSchema = z.object({
   }),
 
   price: z.number({
-    error: iss => {
+    error: (iss) => {
       if (iss.input === undefined) return { message: "Price is required" };
       if (iss.code === "invalid_type")
         return { message: "Price must be a number" };
@@ -70,7 +70,7 @@ const orderValidationSchema = z.object({
   }),
 
   quantity: z.number({
-    error: iss => {
+    error: (iss) => {
       if (iss.input === undefined) return { message: "Quantity is required" };
       if (iss.code === "invalid_type")
         return { message: "Quantity must be a number" };
@@ -81,7 +81,7 @@ const orderValidationSchema = z.object({
 
 export const userCreationValidationSchema = z.object({
   userId: z.number({
-    error: iss => {
+    error: (iss) => {
       if (iss.input === undefined) return { message: "User id is required" };
       if (iss.code === "invalid_type")
         return { message: "User id must be a number" };
@@ -91,7 +91,7 @@ export const userCreationValidationSchema = z.object({
 
   username: z
     .string({
-      error: iss => {
+      error: (iss) => {
         if (iss.input === undefined) return { message: "Username is required" };
         if (iss.code === "invalid_type")
           return { message: "Username must be a string" };
@@ -107,7 +107,7 @@ export const userCreationValidationSchema = z.object({
 
   password: z
     .string({
-      error: iss => {
+      error: (iss) => {
         if (iss.input === undefined) return { message: "Password is required" };
         if (iss.code === "invalid_type")
           return { message: "Password must be a string" };
@@ -126,7 +126,7 @@ export const userCreationValidationSchema = z.object({
   fullName: fullNameValidationSchema,
 
   age: z.number({
-    error: iss => {
+    error: (iss) => {
       if (iss.input === undefined) return { message: "Age is required" };
       if (iss.code === "invalid_type")
         return { message: "Age must be a number" };
@@ -135,7 +135,7 @@ export const userCreationValidationSchema = z.object({
   }),
 
   email: z.email({
-    error: iss => {
+    error: (iss) => {
       if (iss.input === undefined) return { message: "Email is required" };
 
       return { message: "Invalid email address!!" };
@@ -150,3 +150,77 @@ export const userCreationValidationSchema = z.object({
 
   orders: z.array(orderValidationSchema).optional(),
 });
+
+export const userUpationValidationSchema = z
+  .object({
+    userId: z
+      .number({
+        error: (iss) => {
+          if (iss.code === "invalid_type")
+            return { message: "User id must be a number" };
+          return { message: "Invalid user id" };
+        },
+      })
+      .optional(),
+
+    username: z
+      .string({
+        error: (iss) => {
+          if (iss.code === "invalid_type") return "Username must be a string";
+          return "Invalid username";
+        },
+      })
+      .max(20, { message: "Username cannot exceed 20 characters" })
+      .regex(/^[a-zA-Z][a-zA-Z0-9_]*$/, {
+        message:
+          "Username must start with a letter and contain only letters, numbers, and underscores",
+      })
+      .optional(),
+
+    password: z
+      .string({
+        error: (iss) => {
+          if (iss.code === "invalid_type")
+            return { message: "Password must be a string" };
+          return { message: "Invalid password" };
+        },
+      })
+      .min(6, { message: "Password must be at least 6 characters" })
+      .max(20, { message: "Password cannot exceed 20 characters" })
+      .regex(/[A-Z]/, {
+        message: "Must include at least one uppercase letter",
+      })
+      .regex(/[0-9]/, {
+        message: "Must include at least one number",
+      })
+      .optional()
+      .or(z.literal("")),
+
+    fullName: fullNameValidationSchema,
+
+    age: z.number({
+      error: (iss) => {
+        if (iss.input === undefined) return { message: "Age is required" };
+        if (iss.code === "invalid_type")
+          return { message: "Age must be a number" };
+        return { message: "Invalid age" };
+      },
+    }),
+
+    email: z.email({
+      error: (iss) => {
+        if (iss.input === undefined) return { message: "Email is required" };
+
+        return { message: "Invalid email address!!" };
+      },
+    }),
+
+    istActive: z.boolean().optional(),
+
+    hobbies: z.array(z.string()).optional(),
+
+    address: addressValidationSchema,
+
+    orders: z.array(orderValidationSchema).optional(),
+  })
+  .optional();
