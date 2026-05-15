@@ -80,14 +80,14 @@ const orderValidationSchema = z.object({
 });
 
 export const userCreationValidationSchema = z.object({
-  // userId: z.number({
-  //   error: iss => {
-  //     if (iss.input === undefined) return { message: "User id is required" };
-  //     if (iss.code === "invalid_type")
-  //       return { message: "User id must be a number" };
-  //     return { message: "Invalid user id" };
-  //   },
-  // }),
+  userId: z.number({
+    error: iss => {
+      if (iss.input === undefined) return { message: "User id is required" };
+      if (iss.code === "invalid_type")
+        return { message: "User id must be a number" };
+      return { message: "Invalid user id" };
+    },
+  }),
 
   username: z
     .string({

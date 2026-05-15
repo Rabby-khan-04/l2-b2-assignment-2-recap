@@ -24,6 +24,10 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 
+import userRouter from "./app/modules/user/user.routes.js";
+
+app.use("/api", userRouter);
+
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
